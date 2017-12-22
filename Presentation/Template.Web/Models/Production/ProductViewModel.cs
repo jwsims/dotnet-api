@@ -1,4 +1,4 @@
-﻿namespace Template.Services.Production.Models
+﻿namespace Template.Web.Models.Production
 {
     public class ProductViewModel
     {

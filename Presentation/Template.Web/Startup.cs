@@ -6,8 +6,9 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Newtonsoft.Json.Serialization;
 using Template.Data;
-using Template.Services;
+using Template.Data.Entities;
 using Template.Services.Production;
+using Template.Web.Models.Production;
 
 namespace Template.Web
 {
@@ -15,12 +16,12 @@ namespace Template.Web
     {
         public Startup(IHostingEnvironment environment)
         {
-            var builder = new ConfigurationBuilder()
+            IConfigurationBuilder builder = new ConfigurationBuilder()
                 .SetBasePath(environment.ContentRootPath)
                 .AddJsonFile("appsettings.json", false, true)
                 .AddJsonFile($"appsettings.{environment.EnvironmentName}.json", true)
                 .AddEnvironmentVariables();
-            Configuration = builder.Build();
+            this.Configuration = builder.Build();
         }
 
         public IConfiguration Configuration { get; }
@@ -29,7 +30,7 @@ namespace Template.Web
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddDbContext<AppDataContext>(options =>
-                options.UseSqlServer(Configuration.GetConnectionString("DefaultConnection"))
+                options.UseSqlServer(this.Configuration.GetConnectionString("DefaultConnection"))
             );
 
             services.AddScoped<IProductService, ProductService>();
@@ -46,9 +47,15 @@ namespace Template.Web
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IHostingEnvironment env)
         {
-            if (env.IsDevelopment()) app.UseDeveloperExceptionPage();
+            if (env.IsDevelopment())
+            {
+                app.UseDeveloperExceptionPage();
+            }
 
-            Mapper.Initialize(config => config.AddProfile<AutoMapperProfile>());
+            Mapper.Initialize(config =>
+            {
+                config.CreateMap<Product, ProductViewModel>();
+            });
 
             app.UseMvc();
         }

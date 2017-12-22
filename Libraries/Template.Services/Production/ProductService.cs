@@ -4,7 +4,6 @@ using System.Threading.Tasks;
 using AutoMapper.QueryableExtensions;
 using Template.Core.Data.Pagination;
 using Template.Data;
-using Template.Services.Production.Models;
 
 namespace Template.Services.Production
 {
@@ -17,21 +16,21 @@ namespace Template.Services.Production
             this.dataContext = dataContext;
         }
 
-        public async Task<Page<ProductViewModel>> GetProducts(
+        public async Task<Page<T>> GetProducts<T>(
             PagingOptions pagingOptions,
             CancellationToken cancellationToken)
         {
-            return await dataContext
+            return await this.dataContext
                 .Products
                 .OrderBy(x => x.Name)
-                .ProjectTo<ProductViewModel>()
+                .ProjectTo<T>()
                 .ToPagedCollection(pagingOptions, cancellationToken);
         }
     }
 
     public interface IProductService
     {
-        Task<Page<ProductViewModel>> GetProducts(
+        Task<Page<T>> GetProducts<T>(
             PagingOptions pagingOptions,
             CancellationToken cancellationToken);
     }

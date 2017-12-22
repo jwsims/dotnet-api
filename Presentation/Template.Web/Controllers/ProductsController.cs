@@ -1,12 +1,9 @@
-﻿using System.Collections.Generic;
-using System.Threading;
+﻿using System.Threading;
 using System.Threading.Tasks;
-using AutoMapper;
 using Microsoft.AspNetCore.Mvc;
 using Template.Core.Data.Pagination;
-using Template.Data.Entities;
 using Template.Services.Production;
-using Template.Services.Production.Models;
+using Template.Web.Models.Production;
 
 namespace Template.Web.Controllers
 {
@@ -25,11 +22,12 @@ namespace Template.Web.Controllers
             PagingOptions pagingOptions,
             CancellationToken cancellationToken = default(CancellationToken))
         {
-            var products = await productService.GetProducts(pagingOptions, cancellationToken);
+            Page<ProductViewModel> products =
+                await this.productService.GetProducts<ProductViewModel>(pagingOptions, cancellationToken);
 
-            Response.Headers.AddPaginationHeader(products);
+            this.Response.Headers.AddPaginationHeader(products);
 
-            return Ok(products);
+            return this.Ok(products);
         }
     }
 }
