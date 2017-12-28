@@ -1,0 +1,11 @@
+{
+  "products": {
+    "title": "Adventure Works Products",
+    "columns": {
+      "productId": "ID",
+      "name": "Name",
+      "productNumber": "Number",
+      "listPrice": "Price"
+    }
+  }
+}

@@ -30,7 +30,7 @@ namespace Template.Web
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddDbContext<AppDataContext>(options =>
-                options.UseSqlServer(this.Configuration.GetConnectionString("DefaultConnection"))
+                options.UseSqlServer(this.Configuration.GetConnectionString("LaptopConnection"))
             );
 
             services.AddScoped<IProductService, ProductService>();
