@@ -1,12 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Linq;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore;
+﻿using Microsoft.AspNetCore;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.Extensions.Configuration;
-using Microsoft.Extensions.Logging;
+using Microsoft.AspNetCore.Server.HttpSys;
 
 namespace Template.Web
 {
@@ -17,9 +11,16 @@ namespace Template.Web
             BuildWebHost(args).Run();
         }
 
-        public static IWebHost BuildWebHost(string[] args) =>
-            WebHost.CreateDefaultBuilder(args)
+        public static IWebHost BuildWebHost(string[] args)
+        {
+            return WebHost.CreateDefaultBuilder(args)
                 .UseStartup<Startup>()
+                .UseHttpSys(options =>
+                {
+                    options.Authentication.Schemes = AuthenticationSchemes.NTLM | AuthenticationSchemes.Kerberos;
+                    options.Authentication.AllowAnonymous = true;
+                })
                 .Build();
+        }
     }
 }

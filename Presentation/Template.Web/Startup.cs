@@ -1,10 +1,12 @@
 ﻿using AutoMapper;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Server.HttpSys;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Newtonsoft.Json.Serialization;
+using Template.Core.Data.Pagination;
 using Template.Data;
 using Template.Data.Entities;
 using Template.Services.Production;
@@ -33,6 +35,9 @@ namespace Template.Web
                 options.UseSqlServer(this.Configuration.GetConnectionString("LaptopConnection"))
             );
 
+            services.AddAuthentication(HttpSysDefaults.AuthenticationScheme);
+            services.Configure<PagingOptions>(this.Configuration.GetSection("DefaultPagingOptions"));
+
             services.AddScoped<IProductService, ProductService>();
             services.AddScoped<IWorkOrderService, WorkOrderService>();
 
@@ -52,10 +57,7 @@ namespace Template.Web
                 app.UseDeveloperExceptionPage();
             }
 
-            Mapper.Initialize(config =>
-            {
-                config.CreateMap<Product, ProductViewModel>();
-            });
+            Mapper.Initialize(config => { config.CreateMap<Product, ProductViewModel>(); });
 
             app.UseMvc();
         }

@@ -1,9 +1,6 @@
-﻿using System.Collections.Generic;
-using System.Linq;
-using System.Net.NetworkInformation;
+﻿using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
-using AutoMapper;
 using Microsoft.AspNetCore.Http;
 using Microsoft.EntityFrameworkCore;
 using Newtonsoft.Json;
@@ -11,7 +8,7 @@ using Newtonsoft.Json.Serialization;
 
 namespace Template.Core.Data.Pagination
 {
-    public static class PagingExtentions
+    public static class PagingExtensions
     {
         private const string PaginationHeaderKey = "X-Pagination";
 
